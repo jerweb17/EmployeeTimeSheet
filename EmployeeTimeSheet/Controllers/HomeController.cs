@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeTimeSheet.Controllers
 {
+    // I delete the "Home" folder from views, since the intent here was not to have a company landing page. 
+    // I wanted to remove any additional links or routing that were generated when I created the project in Visual Studio
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -13,6 +15,7 @@ namespace EmployeeTimeSheet.Controllers
             _logger = logger;
         }
 
+        // To ensure any links or pages that were pre-built into the solution didn't point to a non-existent homepage, I routed to TimeSheet
         public IActionResult Index()
         {
             return RedirectToAction("Index", "TimeSheet");
