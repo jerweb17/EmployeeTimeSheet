@@ -21,7 +21,7 @@ public class TimeEntryController : Controller
         var employees = _employeeService.LoadEmployees()
             .Select(e => new SelectListItem
             {
-                Value = e.EmployeeID.ToString(),
+                Value = e.EmployeeID.ToString(),     //Display the First and Last Name, but use the EmployeeID 
                 Text = $"{e.FirstName} {e.LastName}"
             }).ToList();
 
@@ -44,6 +44,7 @@ public class TimeEntryController : Controller
             }).ToList();
         model.Employees = employees;
 
+        // Input Validation Section
         if (!ModelState.IsValid)
             return PartialView("_AddTimeEntryModal", model);
 
