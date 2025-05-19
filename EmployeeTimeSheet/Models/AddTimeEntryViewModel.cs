@@ -6,6 +6,8 @@
     public class AddTimeEntryViewModel
     {
         [Required]
+        //I gave EmployeeID a display name here so that users could be selected by their names. 
+        //The Employee Name gets translated into EmployeeID in the controller before submitting the POST
         [Display(Name = "Employee Name")]
         public int EmployeeID { get; set; }
 
