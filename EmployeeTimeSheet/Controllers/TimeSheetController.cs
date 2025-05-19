@@ -46,6 +46,8 @@ namespace EmployeeTimeSheet.Controllers
             return View(joined);
         }
 
+        //I was not positive what would happen if I removed the routing that were injected when I created the controller, so I left them.
+        
         //// GET: TimeSheetController
         //public ActionResult Index()
         //{
