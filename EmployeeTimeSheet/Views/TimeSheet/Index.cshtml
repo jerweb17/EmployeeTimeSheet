@@ -1,0 +1,120 @@
+﻿@model IEnumerable<EmployeeTimeSheet.Models.EmployeeTimeEntryViewModel>
+
+<form method="get" asp-action="Index">
+    <div class="row align-items-end g-3">
+        <div class="col-auto">
+            <label for="lastName" class="form-label">Last Name:</label>
+            <input type="text" name="lastName" id="lastName" class="form-control"
+                   value="@ViewData["LastNameFilter"]" />
+        </div>
+        <div class="col-auto">
+            <label for="date" class="form-label">Date:</label>
+            <input type="date" name="date" id="date" class="form-control"
+                   value="@ViewData["DateFilter"]" />
+        </div>
+        <div class="col-auto d-flex">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+
+
+    </div>
+    <br />
+</form>
+<button type="button" class="btn btn-primary" id="addTimeEntryBtn">Add Time Entry</button>
+<div  id="addTimeEntryModalContainer" aria-hidden="true" tabindex="-1" ></div>
+<br />
+
+<table class="table">
+    <caption>Employee Time Entries</caption>
+    <thead>
+        <tr>
+            <th scope="col">Entry ID</th>
+            <th scope="col">Employee ID</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Date</th>
+            <th scope="col">In Time</th>
+            <th scope="col">Out Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.EntryID</td>
+                <td>@item.EmployeeID</td>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.Date</td>
+                <td>@item.InTime</td>
+                <td>@item.OutTime</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#addTimeEntryBtn').click(function () {
+            $.get('@Url.Action("Add", "TimeEntry")', function (data) {
+                $('#addTimeEntryModalContainer').html(data);
+                var modalElement = document.getElementById('addTimeEntryModalContainer').querySelector('.modal');
+                var modal = new bootstrap.Modal(modalElement);
+
+                // Remove any previous event handlers before adding a new one
+                $(modalElement).off('hidden.bs.modal').on('hidden.bs.modal', function () {
+                    $('#addTimeEntryModalContainer').empty();
+                });
+
+                modal.show();
+            });
+        });
+
+        // Delegate form submit to dynamically loaded form
+        $('#addTimeEntryModalContainer').on('submit', '#addTimeEntryForm', function (e) {
+            e.preventDefault();
+            var form = $(this);
+                    $.ajax({
+            url: '@Url.Action("Add", "TimeEntry")',
+            type: 'POST',
+            data: form.serialize(),
+            dataType: "json", 
+            success: function (result) {
+                if (result && result.success) {
+                    // Close modal and refresh
+                    var modalElement = document.getElementById('addTimeEntryModalContainer').querySelector('.modal');
+                    var modal = bootstrap.Modal.getInstance(modalElement);
+                    if (modal) modal.hide();
+                    window.location.reload();
+                } else if (result && result.error) {
+                    alert(result.error);
+                } else {
+                    // If validation failed, server returns HTML, so handle in error callback
+                }
+            },
+            error: function (xhr) {
+                // If validation fails, the server returns HTML, not JSON
+                $('#addTimeEntryModalContainer').html(xhr.responseText);
+                var modalElement = document.getElementById('addTimeEntryModalContainer').querySelector('.modal');
+                var modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+
+                // Remove any previous event handlers before adding a new one
+                $(modalElement).off('hidden.bs.modal').on('hidden.bs.modal', function () {
+                    $('#addTimeEntryModalContainer').empty();
+                    window.location.reload();
+                });
+
+                modal.show();
+            }
+        });
+
+        });
+    });
+</script>
+    
+    
+}

@@ -1,0 +1,52 @@
+﻿@model AddTimeEntryViewModel
+<form id="addTimeEntryForm" method="post" >
+    <div class="modal fade" tabindex="-1" contenteditable="true"  >
+        <div class="modal-dialog" role="none">
+            <div class="modal-content">
+                <div class="modal-header bg-light">
+                    <h3 class="modal-title">Add Time Entry</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button> 
+                </div>
+        
+                <div class="modal-body bg-light">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="EmployeeID" class="form-label"></label>
+                        <select asp-for="EmployeeID" asp-items="Model.Employees" class="form-select"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Date" class="form-label"></label>
+                        <input asp-for="Date" class="form-control" type="date" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="InTime" class="form-label"></label>
+                        <input asp-for="InTime" class="form-control" type="time" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="OutTime" class="form-label"></label>
+                        <input asp-for="OutTime" class="form-control" type="time" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-dismiss="modal">Close</button>
+				    </div>
+				</div>
+			</div>
+		</div>
+   
+</form>
+
+@section Scripts {
+    @* <partial name="_ValidationScriptsPartial" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.13/dist/jquery.validate.unobtrusive.min.js"></script> *@
+
+    <script>
+        // If this partial is loaded dynamically, re-parse for unobtrusive validation
+        $(function () {
+            $.validator.unobtrusive.parse('#addTimeEntryModalContainer');
+        });
+    </script>
+}
